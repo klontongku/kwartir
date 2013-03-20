@@ -3,7 +3,7 @@ class Pages extends CI_Controller{
 	public function __construct(){
     	parent::__construct();
 		$this->load->helper(array('common', 'image'));
-		$this->load->model(array('Activity', 'Event', 'Cms'));
+		$this->load->model(array('Activity', 'Event', 'Cms', 'Gallery'));
 		// $this->load->library(array('common'));
     }
 
@@ -30,11 +30,21 @@ class Pages extends CI_Controller{
     		),
     		'limit' => array(3)
     	));
+        $newest_gallery = $this->Gallery->select(array(
+            'where' => array(
+                'gallery_headers.active_header' => 1
+            ),
+            'order' => array(
+                'gallery_headers.gallery_header_id' => 'DESC'
+            ),
+            'limit' => 5
+        ));
     	$data = array(
     		'data_content' => array(
     			'newest_activities' => $newest_activities,
-    			'newest_event' => $newest_event
-    		),
+    			'newest_event' => $newest_event,
+    		    'newest_gallery' => $newest_gallery
+            ),
     		'_banner' => true,
     		'content_for_layout' => 'pages/home',
             'current_class' => 'home',
