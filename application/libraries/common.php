@@ -73,7 +73,9 @@ class CI_Common {
       $config =  array(
           'base_url' => $path,
           'total_rows' => $total_rows,
-          'per_page' => $perpage,          
+          'per_page' => $perpage,    
+
+          // 'use_page_numbers' => true,      
                     
           'next_link' => '>',
           'next_tag_open' => '<span>',

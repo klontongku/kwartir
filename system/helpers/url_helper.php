@@ -146,7 +146,11 @@ if ( ! function_exists('anchor'))
 
 		if ( ! is_array($uri))
 		{
-			$site_url = ( ! preg_match('!^\w+://! i', $uri)) ? site_url($uri) : $uri;
+			if($uri == 'javascript:void(0)'){
+				$site_url = 'javascript:void(0)';
+			}else{
+				$site_url = ( ! preg_match('!^\w+://! i', $uri)) ? site_url($uri) : $uri;
+			}
 		}
 		else
 		{

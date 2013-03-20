@@ -19,10 +19,10 @@
     function addCrumb($nameCrumb = false, $status = false, $uri = 'javascript:void(0)'){
     	if($nameCrumb && $uri){
         if(!$status){
-          $link = anchor($uri, $nameCrumb);            
+          $link = anchor($uri, $nameCrumb.'<span class="divider">/</span>');            
         }
         else{
-          $link = '<span>'.$nameCrumb.'</span>';
+          $link = anchor($uri, $nameCrumb);
         }
         return $link;
       }

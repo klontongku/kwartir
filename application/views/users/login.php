@@ -2,7 +2,7 @@
 	<div class="breadcrumbs">
 		<?php 
 			echo addCrumb('Home', false, base_url());
-			echo addCrumb('Log I', true);
+			echo addCrumb('Log In', true);
 		?>
 	</div>	
 

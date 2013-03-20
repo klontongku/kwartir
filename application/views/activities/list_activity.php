@@ -2,7 +2,7 @@
 	<div class="breadcrumbs">
 		<?php 
 			echo addCrumb('Home', false, base_url());
-			echo addCrumb('Kegiatani', true);
+			echo addCrumb('Kegiatan', true);
 		?>
 	</div>
 	

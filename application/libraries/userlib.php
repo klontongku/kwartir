@@ -67,7 +67,7 @@ class CI_Userlib {
 			),
 			'order' => array(
 				'users.id'
-			)
+			),
 			'limit' => array(1)
 		));
 		if(empty($last_id)){

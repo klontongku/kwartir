@@ -9,7 +9,7 @@
 	<section id="content" class="ten columns">
 		<?php 
 		if(!empty($events)):
-			foreach ($variable as $key => $value):
+			foreach ($events as $key => $value):
 				$link = 'events/detail/'.$value['event_id'].'/'.toSlug($value['title']);
 		?>
 				<article class="entry event">

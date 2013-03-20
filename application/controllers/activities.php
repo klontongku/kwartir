@@ -51,5 +51,42 @@
 	    	);
 	    	$this->load->view('layouts/default', $data);
 	    }
+
+	    function detail($id = false){
+	    	if(!$id){
+	    		$this->session->set_flashdata('error', 'kegiatan tidak ditemukan.');
+	    		redirect('activities/');
+	    	}else{
+	    		$activities = $this->Activity->select(array(
+	    			'where' => array(
+	    				'activity_id' => $id
+	    			)
+	    		));
+	    		if(!empty($activities)){
+	    			$other_activity = $this->Activity->select(array(
+		    			'where' => array(
+		    				'activity_id <>' => $id
+		    			),
+		    			'order' => array(
+		    				'activity_id' => 'DESC'
+		    			),
+		    			'limit' => array(5)
+		    		));
+	    			$activities = $activities[0];
+			    	$data = array(
+			    		'data_content' => array(
+			    			'activities' => $activities,
+			    			'other_activity' => $other_activity
+			    		),
+			    		'current_class' => 'activities',
+			    		'content_for_layout' => 'activities/detail',
+			    	);
+			    	$this->load->view('layouts/default', $data);
+	    		}else{
+		    		$this->session->set_flashdata('error', 'kegiatan tidak ditemukan.');
+		    		redirect('activities/');
+	    		}
+	    	}
+	    }
 	}
 ?>

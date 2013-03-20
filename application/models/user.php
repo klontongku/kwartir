@@ -112,8 +112,8 @@ class User extends CI_Model {
         return $count;
     }
 
-    function insert($data){
-        $this->db->insert('users', $data);
+    function insert($data, $table = 'users'){
+        $this->db->insert($table, $data);
     }
 
     function customInsert($table, $data){

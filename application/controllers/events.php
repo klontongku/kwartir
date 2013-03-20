@@ -63,5 +63,42 @@
 	    	);
 	    	$this->load->view('layouts/default', $data);
 	    }
+
+	    function detail($id = false){
+	    	if(!$id){
+	    		$this->session->set_flashdata('error', 'event tidak ditemukan.');
+	    		redirect('events/');
+	    	}else{
+	    		$events = $this->Event->select(array(
+	    			'where' => array(
+	    				'event_id' => $id
+	    			)
+	    		));
+	    		if(!empty($events)){
+	    			$other_events = $this->Event->select(array(
+		    			'where' => array(
+		    				'event_id <>' => $id
+		    			),
+		    			'order' => array(
+		    				'event_id' => 'DESC'
+		    			),
+		    			'limit' => array(5)
+		    		));
+	    			$events = $events[0];
+			    	$data = array(
+			    		'data_content' => array(
+			    			'events' => $events,
+			    			'other_events' => $other_events
+			    		),
+			    		'current_class' => 'events',
+			    		'content_for_layout' => 'events/detail',
+			    	);
+			    	$this->load->view('layouts/default', $data);
+	    		}else{
+		    		$this->session->set_flashdata('error', 'event tidak ditemukan.');
+		    		redirect('events/');
+	    		}
+	    	}
+	    }
 	}
 ?>
