@@ -79,7 +79,7 @@
 		<div class="container">	
 			
 			<?php 
-				echo anchor('pages/index', '<h1>Kwartir Cabang Bogor</h1>', array('id' =>'logo'));
+				echo anchor(base_url(), '<h1>Kwartir Cabang Bogor</h1>', array('id' =>'logo'));
 			?>
 			<div class="clear"></div>
 			<?php $this->load->view('elements/headers/navigation');?>

@@ -58,7 +58,11 @@ class CI_Common {
       }
       $CI->email->to($to);
       $CI->email->subject($subject);
-      $CI->email->message($CI->load->view('elements/emails/html/'.$templatemail, $data, TRUE));
+      $data_email = array(
+        'content_for_layout' => $templatemail,
+        'data_content' => $data
+      );
+      $CI->email->message($CI->load->view('layouts/default_email_html', $data_email, TRUE));
       // $CI->email->set_alt_message($CI->load->view('elements/emails/text/'.$templatemail, $data, TRUE));
       $CI->email->set_newline("\r\n");
 

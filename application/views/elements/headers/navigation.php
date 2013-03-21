@@ -14,7 +14,7 @@
 			<?php echo anchor('galleries/', 'Galeri');?>
 		</li>
 		<li <?php echo (isset($current_class) && $current_class == 'events') ? 'class="'.$current.'"' : '';?>>
-			<?php echo anchor('events/', 'Event');?>
+			<?php echo anchor('events/', 'Jadwal');?>
 		</li>
 		<li <?php echo (isset($current_class) && $current_class == 'contact') ? 'class="'.$current.'"' : '';?>>
 			<?php echo anchor('users/contact', 'Kontak');?>
