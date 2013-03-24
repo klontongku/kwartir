@@ -94,17 +94,17 @@
 						<div class="bordered alignleft">
 							<figure class="add-border">
 								<?php
-									$link =  'javascript:void(0)';
-				                    $image_banner = array(
-				                        'src' => ACTIVITY_PATH.$value['image'],
-				                        'alt' => $value['title'],
-				                        // 'width' => '74px',
-				                        // 'height' => '64px'    
-				                    );
+									$link =  'activities/detail/'.$value['activity_id'].'/'.toSlug($value['title']);
+									$config_image = array(
+										'alt' => $value['title'],
+										'class' => 'image-activity-home'
+									);
+
 				                    if($value['title']){
-				                        $image_banner = array_merge($image_banner, array('title' => $value['title']));
+				                        $config_image = array_merge($config_image, array('title' => $value['title']));
 				                    }
-				                    echo anchor($link, img($image_banner), array(
+				                    $image_banner = showImage(ACTIVITY_PATH, $value['image'], $config_image);
+				                    echo anchor($link, $image_banner, array(
 				                    	'class' => 'single-image'
 				                    ));  
 								?>

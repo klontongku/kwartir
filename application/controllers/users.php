@@ -3,7 +3,7 @@
 		public function __construct(){
 	    	parent::__construct();
 			$this->load->helper(array('common', 'image'));
-			$this->load->model(array('User'));
+			$this->load->model(array('User', 'Forgot'));
 			$this->load->library(array('form_validation', 'userlib'));
 	    }
 
@@ -246,5 +246,121 @@
          }
          redirect('users/login');
       }
+
+      function forgot(){
+        $config_validation = array(
+              array(
+                 'field'   => 'email', 
+                 'label'   => 'Email', 
+                 'rules'   => 'required|valid_email'
+              ),
+           );
+
+        $this->form_validation->set_rules($config_validation);
+        $this->form_validation->set_message('required', 'field ini harus diisi');
+        $this->form_validation->set_message('valid_email', 'format email tidak valid, contoh : "support@yahoo.com"');
+
+        $this->form_validation->set_error_delimiters('<div class="alert_info_advance">', '</div>');
+        
+        if($this->form_validation->run() == true){
+           $user = $this->User->select(array(
+              'where' => array(
+                 'email' => $this->input->post('email')
+              )
+           ));
+
+           if(empty($user)){
+              $this->session->set_flashdata('error', 'maaf, email ini belum terdaftar');
+           }else{
+              $user = $user[0];
+              $birthday = str_replace('-', '', date('Y-m-d', strtotime($user['birthday'])));
+              $created = date('Y-m-d H:i:s');
+              $data = array(
+                 'new_password' => $birthday,
+                 'code_activation' => $this->userlib->randString(31).$user['id'],
+                 'user_id' => $user['id'],
+                 'created_forgot' => $created,
+              );  
+
+              $cek_forgot = $this->Forgot->select(array(
+                 'where' => array(
+                    'user_id' => $user['id']
+                 )
+              ));
+
+              if(empty($cek_forgot)){
+                 if($this->Forgot->insert($data)){
+                    if(!$this->common->sendEmail(SUPPORT_MAIL, $this->input->post('email'), SUPPORT_WORD, 'Konfirmasi Lupa Password', 'forgot_password', $data)){
+                       $this->session->set_flashdata('error', 'Gagal mengirim email konfirmasi, pastikan koneksi internet anda cukup untuk melakukan akses');
+                    }else{
+                       $this->session->set_flashdata('success', 'berhasil melakukan reset password, silahkan melakukan konfirmasi pada email Anda');
+                       redirect(current_url());
+                    }
+                 }else{
+                    $this->session->set_flashdata('error', 'Gagal melakukan lupa password');
+                 }
+              }else{
+                 $cek_forgot = $cek_forgot[0];
+                 if($this->Forgot->update($cek_forgot['id_forgot'], $data)){
+                    if(!$this->common->sendEmail(SUPPORT_MAIL, $this->input->post('email'), SUPPORT_WORD, 'Konfirmasi Lupa Password', 'forgot_password', $data)){
+                       $this->session->set_flashdata('error', 'Gagal mengirim email konfirmasi, pastikan koneksi internet anda cukup untuk melakukan akses');
+                    }else{
+                       $this->session->set_flashdata('success', 'berhasil melakukan reset password, silahkan melakukan konfirmasi pada email Anda');
+                       redirect(current_url());
+                    }
+                 }else{
+                    $this->session->set_flashdata('error', 'Gagal melakukan lupa password');
+                 }
+              }
+           }
+        }
+        $data = array(
+            'content_for_layout' => 'users/forgot',
+        );
+        $this->load->view('layouts/default', $data);
+      }
+
+      function verify_reset_password($user_id = false, $code_activation = false){
+      if($code_activation && $user_id){   
+         $forgot = $this->Forgot->select(array(
+               'where' => array(
+                  'user_id' => $user_id,
+                  'code_activation' => $code_activation,
+               )
+            ));
+         $forgot= $forgot[0];
+         
+         if(!empty($forgot)){
+            if($forgot['completed'] == 0){
+               
+               $update_data = array(
+                  'completed' => 1
+               );
+               if($this->Forgot->update($forgot['id_forgot'], $update_data)){
+                  $update_user = array(
+                     'password' => md5($forgot['new_password'])
+                  );
+                  if($this->User->update($forgot['user_id'], $update_user)){
+                     $this->session->set_flashdata('success', 'Berhasil mengaktivasi reset password, silahkan login dengan password baru anda.');
+                     redirect('users/login');
+                  }else{
+                     $this->session->set_flashdata('error', 'Gagal mengaktivasi reset password');
+                  }
+               }else{
+                  $this->session->set_flashdata('error', 'Gagal mengaktivasi reset password');
+               }
+
+            }else{
+               $this->session->set_flashdata('error', 'aktivasi sudah di lakukan sebelumnya');
+            }
+
+         }else{
+            $this->session->set_flashdata('error', 'code aktivasi anda tidak diketahui');
+         }
+      }else{
+         $this->session->set_flashdata('error', 'code aktivasi anda tidak diketahui');
+      }
+      redirect(base_url());
+   }
 	}
 ?>
