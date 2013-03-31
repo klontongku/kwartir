@@ -46,6 +46,12 @@
 			'id' => 'custom-css',
 			'type' => 'text/css',
 		));
+		echo link_tag(array(
+			'href' => 'css/jquery-ui.css',
+			'rel' => 'stylesheet',
+			'id' => 'jquery-ui-css',
+			'type' => 'text/css',
+		));
 
 	?>
 	<title><?php echo (!empty($title_for_layout)) ? $title_for_layout : 'Kwartir Bogor'?></title>
@@ -62,7 +68,16 @@
 	?>
 	
 	<script type='text/javascript' src='<?php echo base_url();?>js/jquery.min.js'></script>
-	<script type='text/javascript' src='<?php echo base_url();?>js/function.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/custom.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/modernizr.custom.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/rs-plugin/js/jquery.themepunch.plugins.min.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/respond.min.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/rs-plugin/js/jquery.themepunch.plugins.min.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/rs-plugin/js/jquery.themepunch.revolution.min.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/jquery.easing.1.3.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/jquery.cycle.all.min.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/mediaelement-and-player.min.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/jquery.fancybox.js'></script>
 
 	<?php
 		if(!empty($layout_js)){

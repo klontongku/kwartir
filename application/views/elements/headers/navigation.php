@@ -20,6 +20,15 @@
 			<?php echo anchor('users/contact', 'Kontak');?>
 		</li>
 		<?php if($this->session->userdata('logged_in')):?>
+			<li <?php echo (isset($current_class) && $current_class == 'account') ? 'class="'.$current.'"' : '';?>>
+				<?php echo anchor('users/account', 'Account');?>
+					<ul>
+						<li><?php echo anchor('users/edit', 'Edit Profil');?></li>
+						<li><?php echo anchor('users/change_password', 'Ganti Password');?></li>
+						<li><?php echo anchor('users/edit_visibility', 'Ganti Visibilitas Informasi');?></li>
+						<li><?php echo anchor('users/yellow_pages', 'Yellow Pages');?></li>
+					</ul>
+			</li>
 			<li><?php echo anchor('users/logout', 'Logout');?></li>
 		<?php endif;?>
 

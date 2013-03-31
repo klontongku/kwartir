@@ -61,45 +61,15 @@
       }
       return $text;
     }
-    
-/**
-* Outputs an variable
-*
-* @return    string
-*/
-    function getCountCart(){
-      $CI =& get_instance();
-      $CI->load->helper('cookie');
-      $break_cookie = explode('|', get_cookie('klontongcart'));
 
-      $count_cart = 0;
-      if(!empty($break_cookie[0])){
-        $count_cart = count($break_cookie);
-      }
-      return $count_cart;
-    }
-
-    function getMenuHeader(){
-      $CI =& get_instance();
-      $CI->load->model('Product');
-
-      $data = $CI->Product->select(array(
-          'where' => array(
-            'category_products.active_category' => 1
-          )
-        ), 
-      'category_products');
-      return $data;
-    }
-
-    function getStatusTransaction($stat = false){
-      $status = '';
-      switch ($stat) {
-        case 0: echo "invoice belum di approve"; break;
-        case 1: echo "invoice ter-approve"; break;
-        case 2: echo "sudah bayar"; break;
-        case 3: echo "sudah terkirim, transaksi selesai"; break;
-        case 4: echo "invoice di cancel"; break;
-      }
-      return $status;
+    function gugusDepan(){
+        $gugusDepan =  array(
+                            '' => '-Pilih-',
+                            '00' => 'Mabiran',
+                            '01' => 'Andalan Ranting',
+                            '02' => 'Dewan Kerja Ranting',
+                            '03' => 'Pembina/Mabigus',
+                            '04' => 'Anggota',
+                        );
+        return $gugusDepan;
     }

@@ -124,16 +124,6 @@ class CI_Common {
                         'rules'   => 'required'
                      ),
                   array(
-                        'field'   => 'password', 
-                        'label'   => 'Password', 
-                        'rules'   => 'required|min_length[6]'
-                     ),
-                  array(
-                        'field'   => 're_password', 
-                        'label'   => 'Konfirmasi password', 
-                        'rules'   => 'required|min_length[6]|matches[password]'
-                     ),
-                  array(
                         'field'   => 'hometown', 
                         'label'   => 'Tempat Tanggal Lahir', 
                         'rules'   => 'required'
@@ -143,11 +133,6 @@ class CI_Common {
                      'label'   => 'Tempat Tanggal Lahir', 
                      'rules'   => 'trim|required|valid_date[y-m-d,-]'
                   ), 
-                  array(
-                     'field'   => 'email', 
-                     'label'   => 'Email', 
-                     'rules'   => 'required|valid_email|is_unique[users.email]'
-                  ),
                   array(
                      'field'   => 'phone', 
                      'label'   => 'Telepon', 
@@ -182,11 +167,6 @@ class CI_Common {
                      'field'   => 'kwartir_ranting', 
                      'label'   => 'Kwartir Ranting', 
                      'rules'   => 'required|numeric|max_length[2]'
-                  ),
-                  array(
-                     'field'   => 'captcha', 
-                     'label'   => 'captcha', 
-                     'rules'   => 'required'
                   ),
                );
         break;

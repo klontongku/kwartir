@@ -53,6 +53,7 @@ define('ACTIVITY_PATH', 'images/views/activity');
 define('GALLERY_PATH', 'images/views/galleries');
 define('ABOUT_US_PATH', 'images/views/pages');
 define('EVENT_PATH', 'images/views/events');
+define('PROFILE_PATH', 'images/views/users/');
 
 //for email
 define('MARKETING_MAIL', 'marketing@klontongku.com');

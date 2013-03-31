@@ -26,7 +26,7 @@
 					<h2 class="title"><?php echo $events['title'];?></h2>
 					
 					<span class="e-date"><b><?php printf('%s - %s',customDate($events['from'], 'F d, Y'), customDate($events['to'], 'F d, Y'));?></b>
-						<strong><?php echo $events['clock'];?></strong>
+						<strong><?php echo customDate($events['clock'], 'h:i');?></strong>
 					</span> 
 					<span class="place"><?php printf('<b>Tempat: </b>%s', $events['location'])?></span>
 					

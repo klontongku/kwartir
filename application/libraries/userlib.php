@@ -66,7 +66,7 @@ class CI_Userlib {
 				'users.NIP',
 			),
 			'order' => array(
-				'users.id'
+				'users.id' => 'DESC'
 			),
 			'limit' => array(1)
 		));

@@ -32,8 +32,8 @@
     
     function imageProfile($user_data = array(), $config = array()){
       if($user_data['image']){
-        if(file_exists(PROFILE.$user_data['image'])){
-          $config['src'] = PROFILE.$user_data['image'];
+        if(file_exists(PROFILE_PATH.$user_data['image'])){
+          $config['src'] = PROFILE_PATH.$user_data['image'];
         }else{
           $config['src'] = genderImage($user_data['gender']);
         }       		
@@ -46,9 +46,9 @@
     function genderImage($gender){
       $image = '';
       if($gender == 'female'){
-        $image = PROFILE.'female.png';
+        $image = PROFILE_PATH.'female.png';
       }else{
-        $image = PROFILE.'male.png';
+        $image = PROFILE_PATH.'male.png';
       }
       return $image;
     }
