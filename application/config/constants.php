@@ -57,8 +57,10 @@ define('PROFILE_PATH', 'images/views/users/');
 
 //for email
 define('MARKETING_MAIL', 'marketing@klontongku.com');
-define('SUPPORT_MAIL', 'support@klontongku.com');
-define('SUPPORT_MAIL_PASS', 'starmas567899');
+define('SUPPORT_MAIL', 'muhammad.iksan3107@gmail.com');
+// define('SUPPORT_MAIL', 'support@klontongku.com');
+define('SUPPORT_MAIL_PASS', 'muhammadiksan46');
+// define('SUPPORT_MAIL_PASS', 'starmas567899');
 define('SMTP_MAIL', 'ssl://smtp.gmail.com');
 define('SMTP_PORT_MAIL', '465');
 define('SUPPORT_WORD', 'support');

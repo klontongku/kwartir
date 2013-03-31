@@ -34,81 +34,82 @@
                     'label'   => 'Konfirmasi password', 
                     'rules'   => 'required|min_length[6]|matches[password]'
                 ),
-            ) 
-            );
+            ));
 
             $this->form_validation->set_rules($config_validation);
             $this->form_validation->set_message('required', 'field ini harus diisi');
             $this->form_validation->set_message('valid_email', 'format email tidak valid, contoh : "support@yahoo.com"');
             $this->form_validation->set_message('numeric', 'harus berupa angka');
             $this->form_validation->set_message('min_length', 'minimal 6 karakter');
-            $this->form_validation->set_message('valid_date', 'format tanggal tidak valid, contoh : 2013-01-01');
             $this->form_validation->set_message('matches', 'konfirmasi password harus sama dengan passwword');
             $this->form_validation->set_message('is_unique', 'email ini telah terdaftar, coba dengan email lain');
 
             $this->form_validation->set_error_delimiters('<div class="alert_info_advance">', '</div>');
 
             if($this->form_validation->run() == true){
-              if(in_array($this->input->post('kwartir_ranting'), array('01','02','03','04','05','06'))){
-                if($this->session->userdata('captcha_code') == $this->input->post('captcha')){
-                  $password = md5($this->input->post('password'));
-                  $created = date('Y-m-d H:i:s');
-                  $data_user = array(
-                    'name' => $this->input->post('name'),
-                    'password' => $password,
-                    'hometown' => $this->input->post('hometown'),
-                    'birthday' => $this->input->post('birthday'),
-                    'phone' => $this->input->post('phone'),
-                    'email' => $this->input->post('email'),
+                if(in_array($this->input->post('kwartir_ranting'), array('01','02','03','04','05','06'))){
+                    if($this->session->userdata('captcha_code') == $this->input->post('captcha')){
+                        $password = md5($this->input->post('password'));
+                        $created = date('Y-m-d H:i:s');
+                        $data_user = array(
+                            'name' => $this->input->post('name'),
+                            'password' => $password,
+                            'hometown' => $this->input->post('hometown'),
+                            'birthday' => $this->input->post('birthday'),
+                            'phone' => $this->input->post('phone'),
+                            'email' => $this->input->post('email'),
 
-                    'role_id' => 1,
-                    'address' => $this->input->post('address'),
-                    
-                    'gender' => $this->input->post('gender'),
-                    'blood_type' => $this->input->post('blood_type'),
-                    'religius' => $this->input->post('religius'),
-                    
-                    'gugus_depan' => $this->input->post('gugus_depan'),
-                    'kwartir_ranting' => $this->input->post('kwartir_ranting'),
-                    
-                    'activation_code' => $this->userlib->generate_activation_code($password),
-                    'created' => $created,
-                    'modified' => $created
-                  );
+                            'role_id' => 1,
+                            'address' => $this->input->post('address'),
+                            
+                            'gender' => $this->input->post('gender'),
+                            'blood_type' => $this->input->post('blood_type'),
+                            'religius' => $this->input->post('religius'),
+                            
+                            'gugus_depan' => $this->input->post('gugus_depan'),
+                            'kwartir_ranting' => $this->input->post('kwartir_ranting'),
+                            
+                            'activation_code' => $this->userlib->generate_activation_code($password),
+                            'created' => $created,
+                            'modified' => $created
+                        );
 
-                  if($this->User->insert($data_user) == true){
-                    
-                    if(!$this->common->sendEmail(SUPPORT_MAIL, $this->input->post('email'), SUPPORT_WORD, 'Konfirmasi Aktivasi Member', 'activation_member', $data_user)){
-                       $this->session->set_flashdata('error', 'gagal mengirim email aktivasi, silahkan cek kembali alamat email anda atau segera hubungi customer service kami.');
+                        if($this->User->insert($data_user) == true){
+                            $this->session->set_flashdata('success', 'Berhasil melakukan registrasi, silahkan melakukan konfirmasi lewat email Anda.');  
+                            $this->common->sendEmail(SUPPORT_MAIL, $this->input->post('email'), SUPPORT_WORD, 'Konfirmasi Aktivasi Member', 'activation_member', $data_user);
+                            redirect('users/login');
+                        }else{
+                            // debug(1);die();
+                            $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi'); 
+                            $cap = $this->userlib->make_captcha();
+                            $this->session->set_userdata('captcha_code', $cap['word']);
+                        }  
                     }else{
-                       $this->session->set_flashdata('success', 'Berhasil melakukan registrasi, silahkan melakukan konfirmasi lewat email Anda.');  
-                    }
-                    redirect('users/login');
-                  }else{
-                    $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi'); 
+                        // debug(2);die();
+                        $this->session->set_flashdata('error', 'kode captcha yang Anda masukan salah, coba lagi'); 
+                        $cap = $this->userlib->make_captcha();
+                        $this->session->set_userdata('captcha_code', $cap['word']);
+                    }  
+                }else{
+                    // debug(3);die();
+                    $this->session->set_flashdata('error', 'kwartir ranting 01 - 06, silahkan coba lagi');
                     $cap = $this->userlib->make_captcha();
                     $this->session->set_userdata('captcha_code', $cap['word']);
-                  }  
-              }else{
-                $this->session->set_flashdata('error', 'kode captcha yang Anda masukan salah, coba lagi'); 
+                }
+            }else{
+                // debug(4);die();
+                $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi');
                 $cap = $this->userlib->make_captcha();
                 $this->session->set_userdata('captcha_code', $cap['word']);
-              }  
-             }else{
-                $this->session->set_flashdata('error', 'kwartir ranting 01 - 06, silahkan coba lagi');
-                $cap = $this->userlib->make_captcha();
-                $this->session->set_userdata('captcha_code', $cap['word']);
-             }
-            }
-            else{
-               // $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi');
-               $cap = $this->userlib->make_captcha();
-               $this->session->set_userdata('captcha_code', $cap['word']);
             }
             $data = array(
     	    		'content_for_layout' => 'users/register',
     	    		'current_class' => 'register',
                     'captcha_code' => $cap,
+                    'layout_js'=> array(
+                        'function',
+                        'jquery-ui'
+                    )
     	    	);
 	    	$this->load->view('layouts/default', $data);
         }else{
@@ -226,7 +227,9 @@
                   'users.active' => 0
                )
             );
+
             $data_aktivasi = $this->User->select($cek_user);
+
             if(!empty($data_aktivasi)){
                $user = $data_aktivasi[0];
                if($user['active'] == 1){
@@ -252,10 +255,10 @@
                      unset($data_user['password']);
                      unset($data_user['activation_code']);
                      // var_dump($data_user);die();
-                     $data_user['full_name'] = $data_user['first_name'].' '.$data_user['last_name'];
+                     $data_user['full_name'] = $data_user['name'];
 
                     $this->User->insert(array(
-                        'user_id' => $user['id'],
+                        'user_id' => $id,
                         'v_phone' => 1,
                         'v_address' =>1,
                         'v_email' => 1,  

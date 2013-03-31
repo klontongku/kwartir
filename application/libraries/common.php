@@ -131,7 +131,7 @@ class CI_Common {
                   array(
                      'field'   => 'birthday', 
                      'label'   => 'Tempat Tanggal Lahir', 
-                     'rules'   => 'trim|required|valid_date[y-m-d,-]'
+                     'rules'   => 'required'
                   ), 
                   array(
                      'field'   => 'phone', 
