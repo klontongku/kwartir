@@ -52,6 +52,12 @@
 			'id' => 'jquery-ui-css',
 			'type' => 'text/css',
 		));
+		echo link_tag(array(
+			'href' => 'css/twitter.css',
+			'rel' => 'stylesheet',
+			'id' => 'twitter-css',
+			'type' => 'text/css',
+		));
 
 	?>
 	<title><?php echo (!empty($title_for_layout)) ? $title_for_layout : 'Kwartir Bogor'?></title>
@@ -78,6 +84,7 @@
 	<script type='text/javascript' src='<?php echo base_url();?>js/jquery.cycle.all.min.js'></script>
 	<script type='text/javascript' src='<?php echo base_url();?>js/mediaelement-and-player.min.js'></script>
 	<script type='text/javascript' src='<?php echo base_url();?>js/jquery.fancybox.js'></script>
+	<script type='text/javascript' src='<?php echo base_url();?>js/twitter.js'></script>
 
 	<?php
 		if(!empty($layout_js)){

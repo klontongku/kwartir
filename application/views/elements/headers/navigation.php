@@ -21,7 +21,7 @@
 		</li>
 		<?php if($this->session->userdata('logged_in')):?>
 			<li <?php echo (isset($current_class) && $current_class == 'account') ? 'class="'.$current.'"' : '';?>>
-				<?php echo anchor('users/account', 'Account');?>
+				<?php echo anchor('users/account/'.$this->session->userdata('id').'/'.$this->common->toSlug($this->session->userdata('full_name')), 'Account');?>
 					<ul>
 						<li><?php echo anchor('users/edit', 'Edit Profil');?></li>
 						<li><?php echo anchor('users/change_password', 'Ganti Password');?></li>

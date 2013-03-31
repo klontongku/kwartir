@@ -4,7 +4,7 @@
 	    	parent::__construct();
 			$this->load->helper(array('common', 'image'));
 			$this->load->model(array('User', 'Forgot'));
-			$this->load->library(array('form_validation', 'userlib', 'rmimage'));
+			$this->load->library(array('form_validation', 'userlib', 'rmimage', 'pagination'));
 	    }
 
 	    // function index(){
@@ -253,6 +253,14 @@
                      unset($data_user['activation_code']);
                      // var_dump($data_user);die();
                      $data_user['full_name'] = $data_user['first_name'].' '.$data_user['last_name'];
+
+                    $this->User->insert(array(
+                        'user_id' => $user['id'],
+                        'v_phone' => 1,
+                        'v_address' =>1,
+                        'v_email' => 1,  
+                    ), 'profile_visibilities');
+
                      $this->session->set_userdata('logged_in', true);
                      $this->session->set_userdata($data_user);
                      redirect(base_url());
@@ -389,28 +397,34 @@
                 $this->session->set_flashdata('error', 'Anda tidak mempunyai akses untuk mengakses konten ini.');
                 redirect(base_url());
             }else{
-                $config_user = array(
-                   'where' => array(
-                      'users.status' => 1,
-                      'users.active' => 1,
-                      'users.deleted' => 0,
-                      // 'users.id' => $id
-                      'users.id' => $this->session->userdata('id')
-                   )
-                );
-                $user = $this->User->select($config_user);
-                if(!$user){
-                   $this->session->set_flashdata('error', 'Profile tidak ditemukan.');
-                }else{
-                    $data = array(
-                        'content_for_layout' => 'users/profile',
-                        'data_content' => array(
-                            'user' => $user[0],
-                        ),
-                        'current_class' => 'account'
+                if($id && $slug){
+                    $config_user = array(
+                       'where' => array(
+                          'users.status' => 1,
+                          'users.active' => 1,
+                          'users.deleted' => 0,
+                          // 'users.id' => $id
+                          'users.id' => $id
+                       )
                     );
-                    $this->load->view('layouts/default', $data);           
+                    $user = $this->User->select($config_user);
+                    if(!$user){
+                       $this->session->set_flashdata('error', 'Profile tidak ditemukan.');
+                    }else{
+                        $data = array(
+                            'content_for_layout' => 'users/profile',
+                            'data_content' => array(
+                                'user' => $user[0],
+                            ),
+                            'current_class' => 'account'
+                        );
+                        $this->load->view('layouts/default', $data);           
+                    }
+                }else{
+                    $this->session->set_flashdata('error', 'Profile tidak ditemukan.');
+                    redirect('pages/');
                 }
+                
             }
         }
 
@@ -490,16 +504,165 @@
                         'user' => $user[0],
                     ),
                     'current_class' => 'account',
-                    'layout_js' => array(
-                        'function',
-                        'jquery-ui'
-                    ),
-                    'layout_css' => array(
-                        'jquery-ui'
-                    )
                 );
                 $this->load->view('layouts/default', $data);   
             }
+        }
+
+        function change_password(){
+            if($this->session->userdata('logged_in') == true){
+                $data = array(
+                    'content_for_layout' => 'users/change_password',
+                    'current_class' => 'account',
+                );
+                $this->load->view('layouts/default', $data);  
+            }else{
+              redirect('pages/');
+            }
+        }
+
+        function do_change_password(){
+              if($this->session->userdata('logged_in') == true){
+                  $password = $this->input->post('password');
+                  $conf_password = $this->input->post('conf_password');
+                  if(empty($password) && empty($conf_password)){
+                     $this->session->set_flashdata('error', 'semua field harus diisi');
+                  }elseif ($password != $conf_password) {
+                     $this->session->set_flashdata('error', 'password dan confirm password harus sama');
+                  }elseif (strlen($password) < 6) {
+                     $this->session->set_flashdata('error', 'panjang karakter minimal 6 huruf');
+                  }else{
+                      $cek_old_pass = $this->User->select(array(
+                          'where' => array(
+                              'users.password' => md5($this->input->post('oldpassword')),
+                              'users.status' => 1,
+                              'users.active' => 1,
+                              'users.deleted' => 0
+                          )
+                      ));
+                      if(!empty($cek_old_pass)){
+                          $password = md5($this->input->post('password'));
+                          $data_user = array(
+                              'password' => $password
+                          );
+                          if($this->User->update($this->session->userdata('id'), $data_user)){
+                            $this->session->set_flashdata('success', 'Berhasil melakukan ubah password');
+                            redirect('users/account/'.$this->session->userdata('id').'/'.$this->common->toSlug($this->session->userdata('full_name')));
+                          }else{
+                            $this->session->set_flashdata('error', 'Gagal melakukan ubah password');
+                          }
+                      }else{
+                          $this->session->set_flashdata('error', 'Password lama anda salah');
+                      }
+                  }   redirect('users/change_password');
+              }else{
+                  $this->session->set_flashdata('error', PRIVILAGE_CONTENT);
+                  redirect('users/login');
+              }
+        }
+
+        function edit_visibility(){
+            $user = $this->User->select(array(
+                'where' => array(
+                    'user_id' => $this->session->userdata('id')
+                )
+            ), 'profile_visibilities');
+            if(!empty($user)){
+                $data = array(
+                    'content_for_layout' => 'users/change_visibilities',
+                    'data_content' => array(
+                        'user' => $user[0]
+                    ),
+                    'current_class' => 'account',
+                );
+                $this->load->view('layouts/default', $data); 
+            }else{
+                $this->session->set_flashdata('error', 'user tidak ditemukan');
+                redirect('pages/');
+            }
+        }
+
+        function do_change_visibilities(){
+            $data_form = array(
+                'v_phone' => $this->input->post('phone'),
+                'v_address' => $this->input->post('address'),
+                'v_email' => $this->input->post('email'),
+            );
+            // debug($data_form);die();
+            if($this->User->update($this->session->userdata('id'), $data_form,'profile_visibilities', 'user_id')){
+                $this->session->set_flashdata('success', 'berhasil merubah visibilitas');
+            }else{
+                $this->session->set_flashdata('error', 'Gagal melakukan rubah visibilitas');
+            }
+            redirect('users/edit_visibility');
+        }
+
+        function yellow_pages($offset = false){
+            $perpage = EVENT_PAGINATION; //tentukan jumlah data per halaman
+            $limit = array($perpage);
+
+            if($offset){
+                $merge = array($offset);
+                $limit = array_merge($limit, $merge);
+            }
+
+            $default_condition =  array(
+                    'users.active' => 1,
+                    'users.status' => 1,
+                    'users.deleted' => 0
+                );
+
+            $condition = array(
+                'where' => $default_condition,
+                'join' => array(
+                    'profile_visibilities' => 'profile_visibilities.user_id = users.id',            
+                ),
+                'order' => array(
+                    'users.name' => 'ASC'
+                ),
+                'limit' => $limit
+            );
+
+            $count_condition = array(
+                'where' => $default_condition,
+            );
+
+            $keyword = '';
+
+            if(isset($_GET['keyword'])){
+                $keyword = $_GET['keyword'];
+                $add_condition = array(
+                    'like' => array(
+                        'users.name' => $keyword,
+                    ),
+                    'or' => array(
+                        'users.email' => $keyword
+                    )
+                );
+
+                $count_condition = array_merge($count_condition, $add_condition);
+                $condition = array_merge($condition, $add_condition);
+            }            
+
+            $base_url =  base_url().'users/yellow_pages/';
+            $total_rows = $this->User->countAllResult($count_condition);
+
+            $config = $this->common->configPagination($base_url, $total_rows, $perpage);
+            //inisialisasi pagination dn config di atas
+
+            $this->pagination->initialize($config);
+            
+            $users = $this->User->select($condition);
+            $data = array(
+                'data_content' => array(
+                    'users' => $users,
+                    'pagination' => $this->pagination->create_links(),
+                ),
+                'current_class' => 'account',
+                'content_for_layout' => 'users/yellow_pages',
+                'keyword' => (!empty($keyword)) ? $keyword : '',
+            );
+            $this->load->view('layouts/default', $data);
         }
 
 	}

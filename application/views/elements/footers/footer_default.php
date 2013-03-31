@@ -38,38 +38,8 @@
 			
 			<div class="widget widget_recent_entries">
 
-				<h3 class="widget-title">Berita</h3>
-
-				<ul>
-					<li>
-						<div class="bordered alignleft">
-							<figure class="add-border">
-								<a class="single-image" href="#"><img src="images/temp/recent-img-4.jpg" alt="" /></a>
-							</figure>
-						</div><!--/ .bordered-->
-						<h6><a href="#">Conseq uuntur magn</a></h6>
-						<div class="entry-meta">Sep, 15,  <a href="#">2 Comments</a></div>
-					</li>
-					<li>
-						<div class="bordered alignleft">
-							<figure class="add-border">
-								<a class="single-image" href="#"><img src="images/temp/recent-img-6.jpg" alt="" /></a>
-							</figure>
-						</div><!--/ .bordered-->
-						<h6><a href="#">Gravida eget metus</a></h6>
-						<div class="entry-meta">Sep, 15,  <a href="#">2 Comments</a></div>
-					</li>
-					<li>
-						<div class="bordered alignleft">
-							<figure class="add-border">
-								<a class="single-image" href="#"><img src="images/temp/recent-img-6.jpg" alt="" /></a>
-							</figure>
-						</div><!--/ .bordered-->
-						<h6><a href="#">Nulla vitae elit libero</a></h6>
-						<div class="entry-meta">Sep, 15,  <a href="#">2 Comments</a></div>
-					</li>
-				</ul>
-
+				<h3 class="widget-title">Twitter</h3>
+				<div id="jstwitter"></div>
 			</div><!--/ .widget-->				
 			
 		</div><!--/ .four-->
@@ -81,41 +51,75 @@
 				<h3 class="widget-title">Site Map</h3>
 
 				<ul>
-					<li><a href="#">Home</a></li>
-					<li><a href="#">Tentang Kami</a></li>
-					<li><a href="#">Galeri</a></li>
-					<li><a href="#">Kontak</a></li>
-					<li><a href="#">Register</a></li>
+					<li>
+						<?php echo anchor(base_url(), 'Home');?>
+					</li>
+					<li>
+						<?php echo anchor('pages/about_us', 'Tentang Kami');?>
+					</li>
+					<li>
+						<?php echo anchor('activities/', 'Kegiatan');?>
+					</li>
+					<li>
+						<?php echo anchor('galleries/', 'Galeri');?>
+					</li>
+					<li>
+						<?php echo anchor('events/', 'Jadwal');?>
+					</li>
+					<li>
+						<?php echo anchor('users/contact', 'Kontak');?>
 				</ul>
 
 			</div><!--/ .widget-->				
 			
 		</div><!--/ .four-->
 		
+		<?php if($this->session->userdata('logged_in') == false):?>
 		<div class="four columns">
 			
 			<div class="widget widget_contact_form">
 
 				<h3 class="widget-title">Log In</h3>
-
-				<form action="/" method="post">
-					
+				<?php 
+					echo form_open('users/login/', array(
+						'class' => 'comments-form',
+						'id' => 'contactform'
+					));
+				?>
 					<p class="input-block">
-						<label>E-mail:</label>
-						<input type="text" />
+						<?php
+							echo form_label('E-mail', 'username');
+							echo form_input(array(
+								'class' => 'input-text',
+								'name' => 'email',
+								'id' => 'username',
+							));
+							echo form_error('email');
+						?>
 					</p>
 					<p class="input-block">
-						<label>Password:</label>
-						<input type="text" />
+						<?php
+							echo form_label('Password', 'password');
+							echo form_password(array(
+								'class' => 'input-text',
+								'name' => 'password',
+								'id' => 'password'
+							));
+							echo form_error('password');
+						?>
 					</p>
-					<p><button class="button default" type="submit">Submit</button></p>
-					
-				</form>
-
-			</div><!--/ .widget-->				
-			
-		</div><!--/ .four-->
-		
-	</div><!--/ .container-->
+					<p class="input-block">
+						<?php 
+							$attr = 'class = "button default"';
+							echo form_submit('login', 'Login', $attr).'<br />';
+							echo anchor('users/forgot/', 'Lupa password ?', array('class' => 'lost_password'));
+						?>
+					</p>
+					</p>
+				<?php echo form_close();?>
+			</div>
+		</div>
+		<?php endif;?>		
+	</div>
 	
-</footer><!--/ #footer-->
+</footer>
