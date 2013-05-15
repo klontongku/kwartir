@@ -1,0 +1,48 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.bleed
+{
+	width:249.36px;
+	height:167.28px;
+	background:url(../images/bleed.png);
+	position:fixed;
+	font-family:Tahoma;
+		
+}
+
+.trim
+{
+	width:238.11px;
+	height:155.906px;
+	border:1px #03F dotted;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:5.687px;
+}
+
+.save
+{
+	width:226.772px;
+	height:144.568px;
+	border:1px #03F dotted;
+	margin-left:4.669px;
+	float:left;
+	margin-top:4.669px;
+}
+
+.header
+{
+	width:100%
+}
+
+.judul{text-align:center; font-size:12px; float:right; margin-top:-40px; margin-right:30px;}
+.logo img{ width:20px; margin-left:10px;}
+.bendera{ height:5px; float:right; margin-top:-20px; width:195.8px;}
+.nama{font-size:10px; float:right; margin-right:72px;}
+.foto img{max-height:60px; float:left; margin-left:5px; margin-top:18px;}
+.berlaku{font-size:5px; float:left; margin-left:2px;}
+.identitas table{font-size:5px; float:right; margin-right:40px;}
+.identitas td{max-width:80px;}
+.rightside{float:right; font-size:4.5px; }
