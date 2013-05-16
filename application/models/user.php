@@ -114,6 +114,11 @@ class User extends CI_Model {
 
     function insert($data, $table = 'users'){
         $this->db->insert($table, $data);
+        if($this->db->affected_rows() > 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     function customInsert($table, $data){

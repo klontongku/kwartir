@@ -4,7 +4,7 @@
 <head>
 <meta content="en-us" http-equiv="Content-Language">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<title><?php echo 'Klontongku.com'?></title>
+<title><?php echo 'scmis.web.id'?></title>
 <style type="text/css">
 body {
 	margin:0;
@@ -29,9 +29,6 @@ body {
 				<td style=" width:620px;" valign="top">
 					<table cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse;font-family:Tahoma; font-weight:normal; font-size:12px; line-height:15pt; color:#444444;" >
 						<tr>
-							<td bgcolor="#455C44" style="width: 320px; padding:10px 0 10px 20px; background:#455C44; background-color:#455C44; color:#ffffff;" valign="top">
-								Customer Line: 021-9876543 
-							</td>
 							<td bgcolor="#455C44" style="width: 300px; padding:10px 20px 10px 20px; background:#455C44; background-color:#455C44; text-align:right; color:#ffffff;" valign="top">
 							</td>
 						</tr>
@@ -70,7 +67,7 @@ body {
 				<td bgcolor="#455C44" style="padding:0 20px 15px 20px; background-color:#455C44; background:#455C44;">
 					<table cellpadding="0" cellspacing="0" style="width: 100%; border-collapse:collapse; font-family:Tahoma; font-weight:normal; font-size:12px; line-height:15pt; color:#FFFFFF;">
 						<tr>
-							<td style="padding:20px 0 0 0;" colspan="2">Copyright © 2012 Klontongku.com</td>
+							<td style="padding:20px 0 0 0;" colspan="2">Copyright © 2013 scmis.web.id</td>
 						</tr>
 					</table>
 				</td>

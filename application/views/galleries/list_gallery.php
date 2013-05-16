@@ -27,7 +27,7 @@
 									$image_gallery = showImage(GALLERY_PATH, $value['photo_primer'], $default);
 
 				                    echo anchor($link, $image_gallery, array(
-				                    	'class' => 'single-image picture-icon',
+				                    	'class' => 'single-image',
 				                    	'title' => $title,
 				                    	'rel' => 'gallery'
 				                    ));  

@@ -12,97 +12,91 @@
 	    // }
 
 	    function register(){
-         if($this->session->userdata('logged_in') == false){
-            $config_validation = array_merge($this->common->configValidation('user'), array(
-                array(
-                     'field'   => 'captcha', 
-                     'label'   => 'captcha', 
-                     'rules'   => 'required'
-                ),
-                array(
-                    'field'   => 'email', 
-                    'label'   => 'Email', 
-                    'rules'   => 'required|valid_email|is_unique[users.email]'
-                ),
-                array(
-                    'field'   => 'password', 
-                    'label'   => 'Password', 
-                    'rules'   => 'required|min_length[6]'
-                 ),
-                array(
-                    'field'   => 're_password', 
-                    'label'   => 'Konfirmasi password', 
-                    'rules'   => 'required|min_length[6]|matches[password]'
-                ),
-            ));
+            if($this->session->userdata('logged_in') == false){
+                $config_validation = array_merge($this->common->configValidation('user'), array(
+                    array(
+                         'field'   => 'captcha', 
+                         'label'   => 'captcha', 
+                         'rules'   => 'required'
+                    ),
+                    array(
+                        'field'   => 'email', 
+                        'label'   => 'Email', 
+                        'rules'   => 'required|valid_email|is_unique[users.email]'
+                    ),
+                    array(
+                        'field'   => 'password', 
+                        'label'   => 'Password', 
+                        'rules'   => 'required|min_length[6]'
+                     ),
+                    array(
+                        'field'   => 're_password', 
+                        'label'   => 'Konfirmasi password', 
+                        'rules'   => 'required|min_length[6]|matches[password]'
+                    ),
+                ));
 
-            $this->form_validation->set_rules($config_validation);
-            $this->form_validation->set_message('required', 'field ini harus diisi');
-            $this->form_validation->set_message('valid_email', 'format email tidak valid, contoh : "support@yahoo.com"');
-            $this->form_validation->set_message('numeric', 'harus berupa angka');
-            $this->form_validation->set_message('min_length', 'minimal 6 karakter');
-            $this->form_validation->set_message('matches', 'konfirmasi password harus sama dengan passwword');
-            $this->form_validation->set_message('is_unique', 'email ini telah terdaftar, coba dengan email lain');
+                $this->form_validation->set_rules($config_validation);
+                $this->form_validation->set_message('required', 'field ini harus diisi');
+                $this->form_validation->set_message('valid_email', 'format email tidak valid, contoh : "support@yahoo.com"');
+                $this->form_validation->set_message('numeric', 'harus berupa angka');
+                $this->form_validation->set_message('min_length', 'minimal 6 karakter');
+                $this->form_validation->set_message('matches', 'konfirmasi password harus sama dengan passwword');
+                $this->form_validation->set_message('is_unique', 'email ini telah terdaftar, coba dengan email lain');
 
-            $this->form_validation->set_error_delimiters('<div class="alert_info_advance">', '</div>');
+                $this->form_validation->set_error_delimiters('<div class="alert_info_advance">', '</div>');
 
-            if($this->form_validation->run() == true){
-                if(in_array($this->input->post('kwartir_ranting'), array('01','02','03','04','05','06'))){
-                    if($this->session->userdata('captcha_code') == $this->input->post('captcha')){
-                        $password = md5($this->input->post('password'));
-                        $created = date('Y-m-d H:i:s');
-                        $data_user = array(
-                            'name' => $this->input->post('name'),
-                            'password' => $password,
-                            'hometown' => $this->input->post('hometown'),
-                            'birthday' => $this->input->post('birthday'),
-                            'phone' => $this->input->post('phone'),
-                            'email' => $this->input->post('email'),
-
-                            'role_id' => 1,
-                            'address' => $this->input->post('address'),
-                            
-                            'gender' => $this->input->post('gender'),
-                            'blood_type' => $this->input->post('blood_type'),
-                            'religius' => $this->input->post('religius'),
-                            
-                            'gugus_depan' => $this->input->post('gugus_depan'),
-                            'kwartir_ranting' => $this->input->post('kwartir_ranting'),
-                            
-                            'activation_code' => $this->userlib->generate_activation_code($password),
-                            'created' => $created,
-                            'modified' => $created
-                        );
-
-                        if($this->User->insert($data_user) == true){
-                            $this->session->set_flashdata('success', 'Berhasil melakukan registrasi, silahkan melakukan konfirmasi lewat email Anda.');  
-                            $this->common->sendEmail(SUPPORT_MAIL, $this->input->post('email'), SUPPORT_WORD, 'Konfirmasi Aktivasi Member', 'activation_member', $data_user);
-                            redirect('users/login');
-                        }else{
-                            // debug(1);die();
-                            $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi'); 
-                            $cap = $this->userlib->make_captcha();
-                            $this->session->set_userdata('captcha_code', $cap['word']);
-                        }  
-                    }else{
-                        // debug(2);die();
-                        $this->session->set_flashdata('error', 'kode captcha yang Anda masukan salah, coba lagi'); 
-                        $cap = $this->userlib->make_captcha();
-                        $this->session->set_userdata('captcha_code', $cap['word']);
-                    }  
-                }else{
-                    // debug(3);die();
-                    $this->session->set_flashdata('error', 'kwartir ranting 01 - 06, silahkan coba lagi');
+                if( $this->form_validation->run() == false){
                     $cap = $this->userlib->make_captcha();
                     $this->session->set_userdata('captcha_code', $cap['word']);
+                }else{
+                    if(in_array($this->input->post('kwartir_ranting'), array('01','02','03','04','05','06'))){
+                        if($this->session->userdata('captcha_code') == $this->input->post('captcha')){
+                            $password = md5($this->input->post('password'));
+                            $created = date('Y-m-d H:i:s');
+                            $data_user = array(
+                                'name' => $this->input->post('name'),
+                                'password' => $password,
+                                'hometown' => $this->input->post('hometown'),
+                                'birthday' => $this->input->post('birthday'),
+                                'phone' => $this->input->post('phone'),
+                                'email' => $this->input->post('email'),
+
+                                'role_id' => 1,
+                                'address' => $this->input->post('address'),
+                                
+                                'gender' => $this->input->post('gender'),
+                                'blood_type' => $this->input->post('blood_type'),
+                                'religius' => $this->input->post('religius'),
+                                
+                                'gugus_depan' => $this->input->post('gugus_depan'),
+                                'kwartir_ranting' => $this->input->post('kwartir_ranting'),
+                                
+                                'activation_code' => $this->userlib->generate_activation_code($password),
+                                'created' => $created,
+                                'modified' => $created
+                            );
+
+                            if($this->User->insert($data_user)){
+                                $this->session->unset_userdata('captcha_code');
+                                $this->session->set_flashdata('success', 'Berhasil melakukan registrasi, silahkan melakukan konfirmasi lewat email Anda.');  
+                                $this->common->sendEmail(SUPPORT_MAIL, $this->input->post('email'), SUPPORT_WORD, 'Konfirmasi Aktivasi Member', 'activation_member', $data_user);
+                                redirect('users/login');
+                            }else{
+                                // debug(1);die();
+                                $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi'); 
+                            }  
+                        }else{
+                            // debug(2);die();
+                            $this->session->set_flashdata('error', 'kode captcha yang Anda masukan salah, coba lagi'); 
+                        }  
+                    }else{
+                        // debug(3);die();
+                        $this->session->set_flashdata('error', 'kwartir ranting 01 - 06, silahkan coba lagi');
+                    }
                 }
-            }else{
-                // debug(4);die();
-                $this->session->set_flashdata('error', 'gagal melakukan registrasi, silahkan coba lagi');
-                $cap = $this->userlib->make_captcha();
-                $this->session->set_userdata('captcha_code', $cap['word']);
-            }
-            $data = array(
+
+                $data = array(
     	    		'content_for_layout' => 'users/register',
     	    		'current_class' => 'register',
                     'captcha_code' => $cap,
@@ -111,64 +105,66 @@
                         'jquery-ui'
                     )
     	    	);
-	    	$this->load->view('layouts/default', $data);
-        }else{
-            // $ci = new Common;
-            redirect('users/profile/'.$this->session->userdata('id').'/'.$this->common->toSlug($this->session->userdata('full_name').'/'));
-        }
+    	    	$this->load->view('layouts/default', $data);
+            }else{
+                // $ci = new Common;
+                redirect('users/profile/'.$this->session->userdata('id').'/'.$this->common->toSlug($this->session->userdata('full_name').'/'));
+            }
 		}
 
 	    function login(){
 	    	if(!$this->session->userdata('logged_in')){
-	             $config_validation = $this->common->configValidation('login');
+	           $config_validation = $this->common->configValidation('login');
                $this->form_validation->set_rules($config_validation);
                $this->form_validation->set_message('required', 'field ini harus diisi');
                $this->form_validation->set_message('valid_email', 'format email tidak valid, contoh : "support@yahoo.com"');
 
                $this->form_validation->set_error_delimiters('<div class="alert_info_advance">', '</div>');
-               if($this->form_validation->run() == true){
-                  $user = array(
-                     'where' => array(
-                        'users.email' => $this->input->post('email'),
-                        'users.password' => md5($this->input->post('password')),
-                        'users.status' => 1,
-                        'users.active' => 1,
-                        'users.deleted' => 0
-                     )
-                  );
+               if($this->form_validation->run() == false){
 
-                  $data_user = $this->User->select($user);
+               }else{
+                    $user = array(
+                         'where' => array(
+                            'users.email' => $this->input->post('email'),
+                            'users.password' => md5($this->input->post('password')),
+                            'users.status' => 1,
+                            'users.active' => 1,
+                            'users.deleted' => 0
+                         )
+                      );
 
-                  if(!empty($data_user)){
-                     $data_user = $data_user[0];
-                     if($data_user['deleted']==1){
-                        $this->session->set_flashdata('error', 'Anda belum mengaktivasi akun anda, cek email Anda untuk melakukan konfirmasi');
-                        redirect('users/login');
-                     }
-                     else if($data_user['active']==0){
-                        $this->session->set_flashdata('error', 'Anda belum mengaktivasi akun anda, cek email Anda untuk melakukan konfirmasi');
-                        redirect('users/login');
-                     }
-                     else{
+                      $data_user = $this->User->select($user);
 
-                     }
-                     unset($data_user['password']);
-                     unset($data_user['activation_code']);
-                     $this->session->set_userdata('logged_in', true);
-                     $this->session->set_userdata($data_user);
-                     $this->session->set_flashdata('success', sprintf('selamat datang, %s', $data_user['name']));
-                     redirect('pages/');
-                  }else{
-                     $this->session->set_flashdata('error', 'Email dan password tidak valid');
-                  }
-               }
+                      if(!empty($data_user)){
+                         $data_user = $data_user[0];
+                         if($data_user['deleted']==1){
+                            $this->session->set_flashdata('error', 'Anda belum mengaktivasi akun anda, cek email Anda untuk melakukan konfirmasi');
+                            redirect('users/login');
+                         }
+                         else if($data_user['active']==0){
+                            $this->session->set_flashdata('error', 'Anda belum mengaktivasi akun anda, cek email Anda untuk melakukan konfirmasi');
+                            redirect('users/login');
+                         }
+                         else{
+
+                         }
+                         unset($data_user['password']);
+                         unset($data_user['activation_code']);
+                         $this->session->set_userdata('logged_in', true);
+                         $this->session->set_userdata($data_user);
+                         $this->session->set_flashdata('success', sprintf('selamat datang, %s', $data_user['name']));
+                         redirect('pages/');
+                      }else{
+                         $this->session->set_flashdata('error', 'Email dan password tidak valid');
+                      }
+                }
                 $data = array(
 		    		'content_for_layout' => 'users/login',
 		    	);
 		    	$this->load->view('layouts/default', $data);
-        }else{
-          redirect('pages/');
-        }
+            }else{
+              redirect('pages/');
+            }
 	    }
 
       function logout(){
@@ -638,7 +634,7 @@
                     'like' => array(
                         'users.name' => $keyword,
                     ),
-                    'or' => array(
+                    'orlike' => array(
                         'users.email' => $keyword
                     )
                 );
@@ -654,7 +650,6 @@
             //inisialisasi pagination dn config di atas
 
             $this->pagination->initialize($config);
-            
             $users = $this->User->select($condition);
             $data = array(
                 'data_content' => array(

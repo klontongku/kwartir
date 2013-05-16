@@ -48,6 +48,9 @@
 	    		),
 	    		'current_class' => 'galleries',
 	    		'content_for_layout' => 'galleries/list_gallery',
+	    		'layout_js' => array(
+	                'jquery.isotope.min',
+	    		)
 	    	);
 	    	$this->load->view('layouts/default', $data);
 	    }
