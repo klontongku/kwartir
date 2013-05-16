@@ -353,7 +353,7 @@
 			   		);
 
             echo form_upload($data);
-            ?>
+            ?><br>maksimal 256x256 pixel
 								</div>
 							</div>						
 							<div class="form-actions">

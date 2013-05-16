@@ -32,7 +32,8 @@
                             <div class="control-group">
 								<label class="control-label" for="fileInput">Photo</label>
 								<div class="controls">
-									<input id="fileInput" name="upload" type="file">
+									<input id="fileInput" name="upload" type="file"><br>
+									maksimal 1200x350 pixel
 								</div>
 							</div>						
 							<div class="form-actions">

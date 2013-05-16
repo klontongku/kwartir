@@ -14,7 +14,7 @@
             
           </div>
             <div class="nama"><?php echo strtoupper($name); ?></div>
-            <div class="foto"><img src="<?php echo base_url(); ?>images/foto.png"></div>
+            <div class="foto"><img src="<?php echo base_url(); ?>images/views/users/<?php echo $image; ?>" ></div>
             <div class="identitas">
               <table border="0">
                 <tbody><tr>

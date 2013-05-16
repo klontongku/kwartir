@@ -47,7 +47,7 @@
 						</fieldset>
 					</form>
 
-					<script type="text/javascript" src="http://localhost/matbola/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+					<script type="text/javascript" src="<?php echo base_url(); ?>js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 	<script type="text/javascript">
 
 tinyMCE.init({

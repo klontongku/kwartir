@@ -468,7 +468,7 @@ class KWAdmin extends CI_Controller{
 
 	    public function frontprint($id)
 	    {
-	    	//if(!$this->input->cookie("kwid",TRUE)){ redirect('kwadmin'); }
+	    	if(!$this->input->cookie("kwid",TRUE)){ redirect('kwadmin'); }
 	    	$detail = $this->Admin->getmemberdetail($id);
 	    	foreach($detail as $row){
 	    		$data['name'] = $row->name;
@@ -480,9 +480,16 @@ class KWAdmin extends CI_Controller{
 	    		$data['depan'] = $row->gugus_depan;
 	    		$data['ranting'] = $row->kwartir_ranting;
 	    		$data['blood'] = $row->blood_type;
+	    		$data['image'] = $row->image;
 	    	}
 	    	
 	    	$this->load->view('admin/frontprint',$data);
+	    }
+
+	    public function backprint($id)
+	    {
+	    	//if(!$this->input->cookie("kwid",TRUE)){ redirect('kwadmin'); }
+	    	$this->load->view('admin/backprint');
 	    }
 
 	    public function statistics(){
